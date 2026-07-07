@@ -1,39 +1,149 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Clock3, DoorOpen } from "lucide-react";
 
-export default function GateInfo() {
+type Props = {
+  selectedSlot: any;
+  setSelectedSlot: React.Dispatch<React.SetStateAction<any>>;
+};
+
+export default function GateInfo({
+  selectedSlot,
+  setSelectedSlot,
+}: Props) {
+
+  const [slots, setSlots] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchSlots();
+  }, []);
+
+  const fetchSlots = async () => {
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const res = await fetch(
+        "http://127.0.0.1:8000/parking-slots",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const data = await res.json();
+
+      setSlots(
+        data.filter(
+          (slot: any) =>
+            slot.SlotStatus === "Empty"
+        )
+      );
+
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    <div className="grid grid-cols-2 gap-6 mt-8">
-      {/* Cổng */}
+    <div className="mt-8 bg-white rounded-3xl border border-gray-200 shadow-sm p-7">
 
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 flex items-center gap-5">
-        <div className="w-16 h-16 rounded-full bg-[#F2EEFF] flex items-center justify-center">
-          <DoorOpen className="text-[#6246EA]" size={30} />
-        </div>
+      <h2 className="text-2xl font-bold mb-6">
+        Thông tin vào bãi
+      </h2>
 
-        <div>
-          <p className="text-gray-500 font-medium">Cổng số</p>
+      {/* Slot */}
 
-          <h2 className="text-5xl font-bold">#1</h2>
-        </div>
+      <div className="mb-6">
+
+        <label className="font-semibold text-gray-700">
+          Chọn Parking Slot
+        </label>
+
+        <select
+          value={selectedSlot?.SlotID || ""}
+          onChange={(e) => {
+
+            const slot = slots.find(
+              (s) =>
+                s.SlotID === Number(e.target.value)
+            );
+
+            setSelectedSlot(slot);
+
+          }}
+          className="mt-3 w-full border rounded-xl px-4 py-3"
+        >
+
+          <option value="">
+            Chọn Slot
+          </option>
+
+          {slots.map((slot) => (
+
+            <option
+              key={slot.SlotID}
+              value={slot.SlotID}
+            >
+              {slot.SlotCode} - {slot.FloorName}
+            </option>
+
+          ))}
+
+        </select>
+
       </div>
 
-      {/* Giờ */}
+      {/* Gate */}
 
-      <div className="bg-white border border-gray-200 rounded-2xl p-6 flex items-center gap-5">
-        <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-          <Clock3 className="text-green-600" size={30} />
+      <div className="grid grid-cols-2 gap-6">
+
+        <div className="border rounded-2xl p-5 flex items-center gap-4">
+
+          <DoorOpen
+            className="text-[#6246EA]"
+            size={30}
+          />
+
+          <div>
+
+            <p className="text-gray-500">
+              Cổng
+            </p>
+
+            <h2 className="text-3xl font-bold">
+              #1
+            </h2>
+
+          </div>
+
         </div>
 
-        <div>
-          <p className="text-gray-500 font-medium">Giờ vào</p>
+        <div className="border rounded-2xl p-5 flex items-center gap-4">
 
-          <h2 className="text-4xl font-bold">09:42:18</h2>
+          <Clock3
+            className="text-green-600"
+            size={30}
+          />
 
-          <p className="text-gray-500 mt-1">20/05/2024</p>
+          <div>
+
+            <p className="text-gray-500">
+              Giờ vào
+            </p>
+
+            <h2 className="text-2xl font-bold">
+              {new Date().toLocaleTimeString()}
+            </h2>
+
+          </div>
+
         </div>
+
       </div>
+
     </div>
   );
 }
