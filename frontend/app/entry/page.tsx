@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 import Sidebar from "@/Components/Sidebar";
 import Header from "@/Components/header";
 
@@ -6,7 +10,14 @@ import VehicleInfo from "@/Components/VehicleInfo";
 import GateInfo from "@/Components/GateInfo";
 import ConfirmEntryButton from "@/Components/ConfirmEntryButton";
 
+
 export default function EntryPage() {
+  const [plateNumber, setPlateNumber] = useState("");
+
+
+  const [selectedSlot, setSelectedSlot] = useState<any>(null);
+
+  const [reload, setReload] = useState(false);
   return (
     <div className="flex min-h-screen bg-[#F5F6FA]">
       <Sidebar />
@@ -27,17 +38,30 @@ export default function EntryPage() {
 
           <div className="grid grid-cols-2 gap-8 mt-8">
             {/* Camera */}
-
-            <CameraPanel />
+          <CameraPanel
+            plateNumber={plateNumber}
+            setPlateNumber={setPlateNumber}
+          
+          />
 
             {/* Thông tin */}
 
             <div>
-              <VehicleInfo />
+              <VehicleInfo
+              plateNumber={plateNumber}
+              />
 
-              <GateInfo />
+              <GateInfo
+              selectedSlot={selectedSlot}
+              setSelectedSlot={setSelectedSlot}
+              />
 
-              <ConfirmEntryButton />
+              <ConfirmEntryButton
+              plateNumber={plateNumber}
+              selectedSlot={selectedSlot}
+              reload={reload}
+              setReload={setReload}
+              />
             </div>
           </div>
         </div>
