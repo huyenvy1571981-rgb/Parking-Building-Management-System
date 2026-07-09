@@ -18,12 +18,11 @@ export default function RevenueChart({
     "Sun",
   ];
 
-  // Tìm giá trị lớn nhất để scale cột
   const maxValue = Math.max(...data, 1);
 
   return (
 
-    <div className="h-[320px] flex items-end justify-between gap-4 px-4">
+    <div className="mt-6 h-[320px] flex items-end justify-between gap-4 px-4">
 
       {data.map((value, index) => (
 
@@ -32,19 +31,41 @@ export default function RevenueChart({
           className="flex flex-col items-center flex-1"
         >
 
+          {/* Bar */}
+
           <div
-            className="w-full rounded-t-xl bg-gradient-to-t from-[#6246EA] to-[#8B7CF8] hover:opacity-80 transition"
+            className="
+              w-full
+              rounded-t-2xl
+              bg-gradient-to-t
+              from-[#6246EA]
+              to-[#8D7BFF]
+              transition-all
+              duration-300
+              hover:opacity-80
+            "
             style={{
-              height: `${(value / maxValue) * 240}px`,
+              height: `${Math.max(
+                (value / maxValue) * 170,
+                8
+              )}px`,
             }}
           />
 
-          <p className="mt-2 text-sm font-medium">
+          {/* Value */}
+
+          <p className="mt-3 text-[13px] font-semibold text-[#151930]">
+
             {value.toLocaleString()}
+
           </p>
 
-          <p className="mt-2 text-sm text-gray-500">
+          {/* Day */}
+
+          <p className="mt-1 text-[13px] text-gray-400">
+
             {days[index]}
+
           </p>
 
         </div>

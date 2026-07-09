@@ -1,6 +1,6 @@
 type Props = {
   title: string;
-  value: string;
+  value: string | number;
   icon: React.ReactNode;
   color: string;
   percent: string;
@@ -14,20 +14,51 @@ export default function StatCard({
   percent,
 }: Props) {
   return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300">
-      <div className="flex justify-between items-start">
-        <div>
-          <p className="text-gray-500 text-sm font-medium">{title}</p>
+    <div
+      className="
+        h-[150px]
+        bg-white
+        rounded-2xl
+        border
+        border-[#ECEEF5]
+        shadow-sm
+        px-6
+      "
+    >
+      <div className="grid grid-cols-[1fr_72px] items-center h-full">
 
-          <h2 className="text-4xl font-bold mt-3">{value}</h2>
+    <div className="flex flex-col items-center justify-center text-center h-full">
 
-          <p className={`mt-4 text-sm font-semibold ${color}`}>{percent}</p>
-        </div>
+        <p className="text-[15px] text-[#8B93A7] font-medium">
+            {title}
+        </p>
 
-        <div className="w-16 h-16 rounded-2xl bg-[#6246EA]/10 flex items-center justify-center">
-          {icon}
-        </div>
-      </div>
+        <h2 className="mt-2 text-[38px] font-bold leading-none text-[#151930]">
+            {value}
+        </h2>
+
+        <p className={`mt-2 text-[15px] font-semibold ${color}`}>
+            {percent}
+        </p>
+
+    </div>
+
+    <div
+        className="
+            w-[72px]
+            h-[72px]
+            rounded-2xl
+            bg-[#6246EA]/10
+            flex
+            items-center
+            justify-center
+            ml-auto
+        "
+    >
+        {icon}
+    </div>
+
+</div>
     </div>
   );
 }
