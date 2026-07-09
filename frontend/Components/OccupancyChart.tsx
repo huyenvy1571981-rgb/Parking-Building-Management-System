@@ -9,7 +9,6 @@ export default function OccupancyChart({
   occupied,
   available,
 }: Props) {
-
   const total = occupied + available;
 
   const percent =
@@ -17,41 +16,41 @@ export default function OccupancyChart({
       ? Math.round((occupied / total) * 100)
       : 0;
 
-  const circumference = 565;
+  const radius = 72;
+  const circumference = 2 * Math.PI * radius;
 
   const offset =
     circumference - (circumference * percent) / 100;
 
   return (
+    <div className="h-[260px] flex items-center justify-center">
 
-    <div className="h-[320px] flex items-center justify-center">
-
-      <div className="relative w-60 h-60">
+      <div className="relative w-[210px] h-[210px]">
 
         <svg
           className="w-full h-full -rotate-90"
-          viewBox="0 0 220 220"
+          viewBox="0 0 200 200"
         >
 
           {/* Background */}
 
           <circle
-            cx="110"
-            cy="110"
-            r="90"
+            cx="100"
+            cy="100"
+            r={radius}
             stroke="#ECEBFF"
-            strokeWidth="18"
+            strokeWidth="14"
             fill="none"
           />
 
           {/* Progress */}
 
           <circle
-            cx="110"
-            cy="110"
-            r="90"
+            cx="100"
+            cy="100"
+            r={radius}
             stroke="#6246EA"
-            strokeWidth="18"
+            strokeWidth="14"
             fill="none"
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -60,28 +59,34 @@ export default function OccupancyChart({
 
         </svg>
 
+        {/* Center */}
+
         <div className="absolute inset-0 flex flex-col items-center justify-center">
 
-          <h1 className="text-5xl font-bold text-[#6246EA]">
+          <h2 className="text-[42px] font-bold text-[#6246EA]">
             {percent}%
-          </h1>
+          </h2>
 
-          <p className="text-gray-500 mt-2">
+          <p className="text-sm text-gray-500 mt-1">
             Occupancy
           </p>
 
-          <p className="text-sm mt-3 text-green-600">
+          <div className="mt-4 text-center">
 
-            {occupied} / {total} Slots
+            <p className="text-[15px] font-semibold text-[#151930]">
+              {occupied} / {total}
+            </p>
 
-          </p>
+            <p className="text-xs text-gray-500">
+              Parking Slots
+            </p>
+
+          </div>
 
         </div>
 
       </div>
 
     </div>
-
   );
-
 }

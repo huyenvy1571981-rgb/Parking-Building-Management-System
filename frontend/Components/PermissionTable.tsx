@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import {
   Home,
   Users,
@@ -13,9 +14,21 @@ import {
   TriangleAlert,
   BarChart3,
   Settings,
+  Search,
 } from "lucide-react";
 
 import PermissionCheckbox from "./PermissionCheckbox";
+
+interface Props {
+  selectedRole: string;
+}
+
+type Permission = {
+  view: boolean;
+  create: boolean;
+  edit: boolean;
+  delete: boolean;
+};
 
 const modules = [
   { icon: Home, name: "Tổng quan" },
@@ -32,55 +45,188 @@ const modules = [
   { icon: Settings, name: "Cài đặt hệ thống" },
 ];
 
-export default function PermissionTable() {
+const createDefaultPermissions = () =>
+  modules.map(() => ({
+    view: true,
+    create: true,
+    edit: true,
+    delete: true,
+  }));
+
+export default function PermissionTable({
+  selectedRole,
+}: Props) {
+  const [keyword, setKeyword] = useState("");
+
+  const [permissions, setPermissions] = useState<
+    Record<string, Permission[]>
+  >({
+    "System Admin": createDefaultPermissions(),
+    "Parking Manager": createDefaultPermissions(),
+    Guard: createDefaultPermissions(),
+    User: createDefaultPermissions(),
+  });
+
+  // Nếu tạo role mới thì tự sinh quyền mặc định
+  if (!permissions[selectedRole]) {
+    permissions[selectedRole] = createDefaultPermissions();
+  }
+
+  const currentPermissions =
+    permissions[selectedRole];
+
+  const filteredModules = useMemo(() => {
+    return modules.filter((m) =>
+      m.name.toLowerCase().includes(keyword.toLowerCase())
+    );
+  }, [keyword]);
+
+  const togglePermission = (
+    moduleName: string,
+    key: keyof Permission
+  ) => {
+    const index = modules.findIndex(
+      (m) => m.name === moduleName
+    );
+
+    if (index === -1) return;
+
+    setPermissions((prev) => {
+      const updated = [
+        ...prev[selectedRole],
+      ];
+
+      updated[index] = {
+        ...updated[index],
+        [key]: !updated[index][key],
+      };
+
+      return {
+        ...prev,
+        [selectedRole]: updated,
+      };
+    });
+  };
+
+  const handleSave = () => {
+    console.log(
+      "Role:",
+      selectedRole
+    );
+
+    console.log(
+      currentPermissions
+    );
+
+    alert(
+      `Đã lưu phân quyền cho ${selectedRole}`
+    );
+  };
+
   return (
     <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-3xl font-bold">Ma trận phân quyền</h2>
 
-          <p className="text-gray-500 mt-1">
+      <div className="flex justify-between items-center mb-8">
+
+        <div>
+
+          <h2 className="text-3xl font-bold">
+            Ma trận phân quyền
+          </h2>
+
+          <p className="mt-2 text-gray-500">
             Vai trò đang chọn:
-            <span className="text-[#6246EA] font-semibold ml-2">
-              System Admin
+
+            <span className="ml-2 font-semibold text-[#6246EA]">
+              {selectedRole}
             </span>
+
           </p>
+
         </div>
 
-        <input
-          placeholder="Tìm kiếm module..."
-          className="
-            w-72
-            h-12
-            rounded-xl
-            border
-            border-gray-200
-            px-4
-            outline-none
-            focus:border-[#6246EA]
-          "
-        />
+        <div className="relative">
+
+          <Search
+            size={18}
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+
+          <input
+            value={keyword}
+            onChange={(e) =>
+              setKeyword(e.target.value)
+            }
+            placeholder="Tìm kiếm module..."
+            className="
+              w-72
+              h-12
+              rounded-xl
+              border
+              border-gray-300
+              pl-11
+              pr-4
+              outline-none
+              focus:border-[#6246EA]
+            "
+          />
+
+        </div>
+
       </div>
 
       <table className="w-full">
+
         <thead>
-          <tr className="border-b bg-gray-50">
-            <th className="text-left p-4">Tên Module</th>
-            <th>Xem</th>
-            <th>Thêm</th>
-            <th>Sửa</th>
-            <th>Xóa</th>
+
+          <tr className="bg-gray-50 border-b">
+
+            <th className="text-left p-4">
+              Module
+            </th>
+
+            <th className="text-center">
+              Xem
+            </th>
+
+            <th className="text-center">
+              Thêm
+            </th>
+
+            <th className="text-center">
+              Sửa
+            </th>
+
+            <th className="text-center">
+              Xóa
+            </th>
+
           </tr>
+
         </thead>
 
         <tbody>
-          {modules.map((item, index) => {
+              {filteredModules.map((item) => {
+
+            const index = modules.findIndex(
+              (m) => m.name === item.name
+            );
+
             const Icon = item.icon;
 
             return (
-              <tr key={index} className="border-b hover:bg-gray-50">
-                <td className="p-4">
+
+              <tr
+                key={item.name}
+                className="border-b hover:bg-gray-50 transition"
+              >
+
+                {/* Module */}
+
+                <td className="px-4 py-5">
+
                   <div className="flex items-center gap-4">
+
                     <div
                       className="
                         w-11
@@ -92,60 +238,136 @@ export default function PermissionTable() {
                         justify-center
                       "
                     >
-                      <Icon size={22} className="text-[#6246EA]" />
+
+                      <Icon
+                        size={22}
+                        className="text-[#6246EA]"
+                      />
+
                     </div>
 
-                    <span>{item.name}</span>
+                    <span className="font-medium">
+                      {item.name}
+                    </span>
+
                   </div>
+
                 </td>
 
-                <td className="text-center">
-                  <PermissionCheckbox checked />
-                </td>
+                {/* View */}
 
                 <td className="text-center">
-                  <PermissionCheckbox checked />
+
+                  <PermissionCheckbox
+                    checked={currentPermissions[index].view}
+                    onChange={() =>
+                      togglePermission(item.name, "view")
+                    }
+                  />
+
                 </td>
 
-                <td className="text-center">
-                  <PermissionCheckbox checked />
-                </td>
+                {/* Create */}
 
                 <td className="text-center">
-                  <PermissionCheckbox checked={index < 9} />
+
+                  <PermissionCheckbox
+                    checked={currentPermissions[index].create}
+                    onChange={() =>
+                      togglePermission(item.name, "create")
+                    }
+                  />
+
                 </td>
+
+                {/* Edit */}
+
+                <td className="text-center">
+
+                  <PermissionCheckbox
+                    checked={currentPermissions[index].edit}
+                    onChange={() =>
+                      togglePermission(item.name, "edit")
+                    }
+                  />
+
+                </td>
+
+                {/* Delete */}
+
+                <td className="text-center">
+
+                  <PermissionCheckbox
+                    checked={currentPermissions[index].delete}
+                    onChange={() =>
+                      togglePermission(item.name, "delete")
+                    }
+                  />
+
+                </td>
+
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
 
-      <div className="flex justify-end gap-4 mt-8">
+            );
+
+          })}
+
+        </tbody>
+          </table>
+
+      {/* Footer */}
+
+      <div className="mt-8 flex justify-end gap-4">
+
         <button
+          onClick={() => {
+
+            if (
+              confirm(
+                "Bạn có muốn khôi phục phân quyền mặc định?"
+              )
+            ) {
+
+              setPermissions((prev) => ({
+                ...prev,
+                [selectedRole]:
+                  createDefaultPermissions(),
+              }));
+
+            }
+
+          }}
           className="
-            px-6
-            py-3
             rounded-xl
             border
             border-[#6246EA]
+            px-6
+            py-3
             text-[#6246EA]
+            hover:bg-[#F2EEFF]
+            transition
           "
         >
-          Hủy bỏ
+          Khôi phục
         </button>
 
         <button
+          onClick={handleSave}
           className="
-            px-6
-            py-3
             rounded-xl
             bg-[#6246EA]
+            px-6
+            py-3
             text-white
+            hover:bg-[#5337d8]
+            transition
           "
         >
           Lưu phân quyền
         </button>
+
       </div>
+
     </div>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
 interface PermissionCheckboxProps {
-  checked?: boolean;
-  onChange?: () => void;
+  checked: boolean;
+  onChange: () => void;
 }
 
 export default function PermissionCheckbox({
-  checked = false,
+  checked,
   onChange,
 }: PermissionCheckboxProps) {
   return (
@@ -15,11 +15,11 @@ export default function PermissionCheckbox({
       checked={checked}
       onChange={onChange}
       className="
-        w-5
         h-5
-        accent-[#6246EA]
+        w-5
         cursor-pointer
+        accent-[#6246EA]
       "
     />
   );
-}
+  }

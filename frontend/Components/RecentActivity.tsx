@@ -10,27 +10,22 @@ export default function RecentActivity({
 
   return (
 
-    <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-7">
+    <div className="bg-white rounded-[28px] border border-[#ECEEF5] shadow-sm px-8 pb-8">
 
-      <div className="flex items-center justify-between mb-6">
+    <div className="text-center pb-8">
+      <div className="h-7"></div>
 
-        <div>
+      <h2 className="text-[30px] font-bold text-[#151930]">
+        Hoạt động gần đây
+      </h2>
 
-          <h2 className="text-2xl font-bold">
+      <p className="text-gray-500 mt-2">
+        5 phiên gửi xe gần nhất
+      </p>
+    </div>
 
-            Hoạt động gần đây
 
-          </h2>
-
-          <p className="text-gray-500 mt-1">
-
-            5 phiên gửi xe gần nhất
-
-          </p>
-
-        </div>
-
-      </div>
+    
 
       <table className="w-full">
 
@@ -38,7 +33,7 @@ export default function RecentActivity({
 
           <tr className="border-b text-gray-500">
 
-            <th className="text-left py-4">
+            <th className="text-left py-6 text-[20px] font-semibold">
               Biển số
             </th>
 
@@ -67,7 +62,7 @@ export default function RecentActivity({
               className="border-b hover:bg-gray-50 transition"
             >
 
-              <td className="py-5 font-semibold">
+              <td className="py-6 font-semibold">
 
                 {item.PlateNumber}
 

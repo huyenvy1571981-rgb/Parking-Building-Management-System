@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+
 import {
   Home,
   Users,
@@ -27,70 +28,192 @@ export default function Sidebar() {
   const [parkingOpen, setParkingOpen] = useState(true);
   const [operationOpen, setOperationOpen] = useState(true);
 
-  const item = (href: string, label: string, Icon: any) => (
+  const MenuItem = (
+    href: string,
+    label: string,
+    Icon: any,
+    child = false
+  ) => (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+      className={`
+      flex items-center gap-3
+      ${child ? "pl-14 pr-5" : "px-5"}
+      py-3
+      rounded-xl
+      transition-all
+      duration-200
+
+      ${
         pathname === href
-          ? "bg-[#F2EEFF] text-[#6246EA] font-semibold"
-          : "hover:bg-gray-100 text-gray-700"
-      }`}
+          ? "bg-[#F3F0FF] text-[#6246EA] font-semibold shadow-sm"
+          : "text-[#667085] hover:bg-[#F8F8FC]"
+      }
+      `}
     >
-      <Icon size={20} />
-      <span>{label}</span>
+      <Icon
+        size={20}
+        className={pathname === href ? "text-[#6246EA]" : ""}
+      />
+
+      <span className="text-[15px]">{label}</span>
     </Link>
   );
 
   return (
-    <aside className="w-[250px] min-h-screen bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-6 border-b">
-        <div className="flex items-center gap-3">
-          <Image src="/logo.png" alt="logo" width={54} height={54} />
-          <div>
-            <h1 className="font-extrabold text-2xl leading-none">PARKING</h1>
-            <p className="text-[#6246EA] font-semibold text-sm">
-              MANAGER SYSTEM
-            </p>
-          </div>
+   <aside
+  className="
+      w-[290px]
+      min-w-[290px]
+      h-screen
+      bg-white
+      border-r
+      border-[#ECEEF5]
+      flex
+      flex-col
+      shadow-sm
+      shrink-0
+    "
+>
+      {/* Logo */}
+
+      <div className="h-[90px] border-b border-[#ECEEF5] flex items-center px-6">
+
+        <Image
+          src="/logo.png"
+          alt="logo"
+          width={52}
+          height={52}
+        />
+
+        <div className="ml-4">
+
+          <h1 className="text-[19px] font-black leading-none text-[#151930]">
+            PARKING
+          </h1>
+
+          <p className="text-[#6246EA] text-[13px] font-bold tracking-wide mt-1">
+            MANAGER SYSTEM
+          </p>
+
         </div>
+
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-1">
-        {item("/dashboard", "Tổng quan", Home)}
-        {item("/user", "Quản lý người dùng", Users)}
-        {item("/role", "Phân quyền", ShieldCheck)}
+      {/* Menu */}
+
+      <div
+        className="
+        flex-1
+        overflow-y-auto
+        px-3
+        py-5
+        space-y-1
+      "
+      >
+        {MenuItem("/dashboard", "Tổng quan", Home)}
+
+        {MenuItem("/user", "Quản lý người dùng", Users)}
+
+        {MenuItem("/role", "Phân quyền", ShieldCheck)}
+
+        {/* Parking */}
 
         <button
           onClick={() => setParkingOpen(!parkingOpen)}
-          className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gray-100"
+          className="
+          w-full
+          flex
+          items-center
+          justify-between
+          px-5
+          py-3
+          rounded-xl
+          text-[#667085]
+          hover:bg-[#F8F8FC]
+          transition
+        "
         >
           <div className="flex items-center gap-3">
+
             <Car size={20} />
-            <span>Quản lý bãi đỗ xe</span>
+
+            <span className="text-[15px]">
+              Quản lý bãi đỗ xe
+            </span>
+
           </div>
-          {parkingOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+
+          {parkingOpen ? (
+            <ChevronDown size={18} />
+          ) : (
+            <ChevronRight size={18} />
+          )}
         </button>
 
         {parkingOpen && (
-        <div className="ml-8 space-y-1">
-        {item("/building", "Tổng quan tòa nhà & phân tầng", Building2)}
 
-        {item("/parking-slot", "Quản lý Parking Slot", Grid2x2)}
+          <div className="space-y-1">
 
-        {item("/slot-map", "Sơ đồ Slot", Grid2x2)}
+            {MenuItem(
+              "/building",
+              "Tổng quan tòa nhà",
+              Building2,
+              true
+            )}
 
-        {item("/pricing", "Quản lý bảng giá", Tags)}
-        </div>
-      )}
+            {MenuItem(
+              "/parking-slot",
+              "Parking Slot",
+              Grid2x2,
+              true
+            )}
+
+            {MenuItem(
+              "/slot-map",
+              "Sơ đồ Slot",
+              Grid2x2,
+              true
+            )}
+
+            {MenuItem(
+              "/pricing",
+              "Bảng giá",
+              Tags,
+              true
+            )}
+
+          </div>
+
+        )}
+
+        {/* Operation */}
 
         <button
           onClick={() => setOperationOpen(!operationOpen)}
-          className="w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-gray-100"
+          className="
+          w-full
+          flex
+          items-center
+          justify-between
+          px-5
+          py-3
+          rounded-xl
+          text-[#667085]
+          hover:bg-[#F8F8FC]
+          transition
+        "
         >
           <div className="flex items-center gap-3">
+
             <LogIn size={20} />
-            <span>Quầy vận hành</span>
+
+            <span className="text-[15px]">
+              Quầy vận hành
+            </span>
+
           </div>
+
           {operationOpen ? (
             <ChevronDown size={18} />
           ) : (
@@ -99,18 +222,75 @@ export default function Sidebar() {
         </button>
 
         {operationOpen && (
-          <div className="ml-8 space-y-1">
-            {item("/entry", "Quầy vào bãi", LogIn)}
-            {item("/exit", "Quầy ra bãi & Thanh toán", LogOut)}
+
+          <div className="space-y-1">
+
+            {MenuItem(
+              "/entry",
+              "Quầy vào bãi",
+              LogIn,
+              true
+            )}
+
+            {MenuItem(
+              "/exit",
+              "Quầy ra bãi",
+              LogOut,
+              true
+            )}
+
           </div>
+
         )}
 
-        {item("/incident", "Xử lý sự cố", TriangleAlert)}
-        {item("/report", "Báo cáo", BarChart3)}
-        {item("/settings", "Cài đặt hệ thống", Settings)}
+        {MenuItem(
+          "/incident",
+          "Xử lý sự cố",
+          TriangleAlert
+        )}
+
+        {MenuItem(
+          "/report",
+          "Báo cáo",
+          BarChart3
+        )}
+
+        {MenuItem(
+          "/settings",
+          "Cài đặt hệ thống",
+          Settings
+        )}
+
       </div>
 
-      <div className="border-t p-4">{item("/login", "Đăng xuất", LogOut)}</div>
+      {/* Footer */}
+
+      <div className="border-t border-[#ECEEF5] p-4">
+
+        <Link
+          href="/login"
+          className="
+          flex
+          items-center
+          gap-3
+          px-5
+          py-3
+          rounded-xl
+          text-red-500
+          hover:bg-red-50
+          transition
+        "
+        >
+          <LogOut size={20} />
+
+          <span className="font-medium">
+            Đăng xuất
+          </span>
+
+        </Link>
+
+      </div>
+
     </aside>
   );
 }
