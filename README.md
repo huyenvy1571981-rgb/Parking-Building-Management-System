@@ -10,7 +10,7 @@ Software Engineering Project
 - Nguyễn Ngọc Hạnh
 
 ## Technologies
-- C#
+- Python
 - SQL Server
 - GitHub
 - Jira
