@@ -9,6 +9,8 @@ from app.models.parking_slot import ParkingSlot
 from app.models.floor import Floor
 from app.models.vehicle_type import VehicleType
 from app.models.user import User
+from app.models.parking_session import ParkingSession
+from app.models.vehicle import Vehicle
 
 from app.schemas.parking_slot import (
     ParkingSlotResponse,
@@ -20,6 +22,25 @@ from app.security import get_current_user
 from app.permissions import staff_required
 
 router = APIRouter()
+
+
+def current_parking_info(db: Session, slot_id: int):
+    row = (
+        db.query(ParkingSession, Vehicle.PlateNumber)
+        .join(Vehicle, ParkingSession.VehicleID == Vehicle.VehicleID)
+        .filter(
+            ParkingSession.SlotID == slot_id,
+            ParkingSession.SessionStatus.in_(["Đang gửi", "Active"]),
+            ParkingSession.ExitTime.is_(None),
+        )
+        .order_by(ParkingSession.EntryTime.desc())
+        .first()
+    )
+    if not row:
+        return {"CurrentPlateNumber": None, "CurrentSessionID": None, "CurrentEntryTime": None}
+    session, plate = row
+    return {"CurrentPlateNumber": plate, "CurrentSessionID": session.SessionID,
+            "CurrentEntryTime": session.EntryTime}
 
 
 # ==========================
@@ -58,7 +79,9 @@ def get_parking_slots(
 
             "FloorName": slot.Floor.FloorName,
 
-            "VehicleTypeName": slot.VehicleType.VehicleTypeName
+            "VehicleTypeName": slot.VehicleType.VehicleTypeName,
+
+            **current_parking_info(db, slot.SlotID)
 
         })
 
@@ -107,7 +130,9 @@ def get_parking_slot(
 
         "FloorName": slot.Floor.FloorName,
 
-        "VehicleTypeName": slot.VehicleType.VehicleTypeName
+        "VehicleTypeName": slot.VehicleType.VehicleTypeName,
+
+        **current_parking_info(db, slot.SlotID)
 
     }
 

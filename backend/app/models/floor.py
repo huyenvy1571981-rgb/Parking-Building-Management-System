@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 
@@ -13,4 +14,7 @@ class Floor(Base):
     Status = Column(Integer)
     Description = Column(String)
     CreatedAt = Column(DateTime)
-    VehicleTypeID = Column(Integer)
+    VehicleTypeID = Column(Integer, ForeignKey("VehicleTypes.VehicleTypeID"))
+
+    Building = relationship("Building")
+    VehicleType = relationship("VehicleType")

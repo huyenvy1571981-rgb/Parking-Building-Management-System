@@ -233,6 +233,7 @@ export default function SlotMapPage() {
                     key={slot.SlotID}
                     code={slot.SlotCode}
                     status={convertStatus(slot.SlotStatus)}
+                    plateNumber={slot.CurrentPlateNumber}
                     onClick={() => handleOpen(slot)}
                   />
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -39,6 +41,9 @@ class ParkingSlotResponse(ParkingSlotBase):
     # mới thêm
     FloorName: str | None = None
     VehicleTypeName: str | None = None
+    CurrentPlateNumber: str | None = None
+    CurrentSessionID: int | None = None
+    CurrentEntryTime: datetime | None = None
 
     class Config:
         from_attributes = True

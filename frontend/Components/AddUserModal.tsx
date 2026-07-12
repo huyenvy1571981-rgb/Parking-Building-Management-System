@@ -31,7 +31,7 @@ export default function AddUserModal({
     setPassword("");
     setPhone("");
     setRoleID(3);
-    setStatus(true);
+    setStatus(1);
   };
 
   const handleSave = async () => {

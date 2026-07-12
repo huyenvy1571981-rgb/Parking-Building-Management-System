@@ -4,9 +4,10 @@ type Props = {
   code: string;
   status: "empty" | "occupied" | "reserved" | "maintenance" | "disabled";
   onClick?: () => void;
+  plateNumber?: string | null;
 };
 
-export default function SlotBox({ code, status, onClick }: Props) {
+export default function SlotBox({ code, status, onClick, plateNumber }: Props) {
   const style = {
     empty: "bg-green-50 border-green-300 text-green-700 hover:bg-green-100",
 
@@ -34,7 +35,8 @@ export default function SlotBox({ code, status, onClick }: Props) {
         ${style[status]}
       `}
     >
-      {code}
+      <span className="block">{code}</span>
+      {plateNumber && <span className="block mt-0.5 text-[10px] font-bold">{plateNumber}</span>}
     </button>
   );
 }
