@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -10,7 +11,7 @@ from app.database import get_db
 from app.models.user import User
 
 
-SECRET_KEY = "parkingbuildingmanagementsystem_secret_key"
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-change-me")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
@@ -78,8 +79,6 @@ def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ):
-    print("========== GET CURRENT USER ==========")
-    print("TOKEN =", token)
     credentials_exception = HTTPException(
         status_code=401,
         detail="Invalid Token"
@@ -92,11 +91,7 @@ def get_current_user(
             algorithms=[ALGORITHM]
         )
 
-        print("PAYLOAD =", payload)
-
         username = payload.get("sub")
-
-        print("USERNAME =", username)
 
         if username is None:
             raise credentials_exception
@@ -107,8 +102,6 @@ def get_current_user(
     user = db.query(User).filter(
         User.Username == username
     ).first()
-
-    print("USER =", user)
 
     if user is None:
         raise credentials_exception

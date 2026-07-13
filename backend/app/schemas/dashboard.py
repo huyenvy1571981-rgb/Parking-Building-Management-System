@@ -30,8 +30,12 @@ class DashboardResponse(BaseModel):
     # Mới
     AvailableSlots: int
     OccupiedSlots: int
+    ReservedSlots: int
     ParkingRate: int
 
     Revenue7Days: list[float]
+    Occupancy7Days: list[int]
+    Entries7Days: list[int]
+    Exits7Days: list[int]
 
     RecentActivities: list[RecentActivity]

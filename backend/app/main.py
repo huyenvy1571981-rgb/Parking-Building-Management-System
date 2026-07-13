@@ -11,6 +11,9 @@ from app.routers.vehicle import router as vehicle_router
 from app.routers.parking_session import router as parking_session_router
 from app.routers.payment import router as payment_router
 from app.routers.dashboard import router as dashboard_router
+from app.routers.mobile import router as mobile_router
+from app.routers.web_operations import router as web_operations_router
+from app.models import mobile as mobile_models
 
 app = FastAPI()
 
@@ -38,6 +41,8 @@ app.include_router(vehicle_router)
 app.include_router(parking_session_router)
 app.include_router(payment_router)
 app.include_router(dashboard_router)
+app.include_router(mobile_router)
+app.include_router(web_operations_router)
 
 
 @app.get("/")
