@@ -1,0 +1,21 @@
+<<<<<<< Updated upstream
+# Python
+backend/venv/
+**/__pycache__/
+*.pyc
+
+# Next.js
+frontend/.next/
+frontend/node_modules/
+
+# Environment
+.env
+=======
+__pycache__/
+*.py[cod]
+.env
+*.db
+node_modules/
+.expo/
+dist/
+>>>>>>> Stashed changes

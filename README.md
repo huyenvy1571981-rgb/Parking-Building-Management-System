@@ -10,7 +10,7 @@ Software Engineering Project
 - Nguyễn Ngọc Hạnh
 
 ## Technologies
-- C#
+- Python
 - SQL Server
 - GitHub
 - Jira
@@ -18,3 +18,11 @@ Software Engineering Project
 
 ## Project Description
 This project is a parking building management system used to manage parking slots, vehicle check-in/check-out, payment, and reports.
+
+## Applications
+
+- `frontend`: Next.js web application for administrators, managers, and parking staff.
+- `backend`: FastAPI API backed by SQL Server.
+- `mobile`: Expo/React Native application for drivers (SRS section 3.3.6).
+
+See each application's README for setup details.

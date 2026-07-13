@@ -3,11 +3,12 @@
 import { X } from "lucide-react";
 
 type Props = {
-  open: boolean;
+  open?: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 };
 
-export default function AddFloorModal({ open, onClose }: Props) {
+export default function AddFloorModal({ open = true, onClose }: Props) {
   if (!open) return null;
 
   return (

@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Parking Driver",
+    "slug": "parking-driver",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": { "backgroundColor": "#5B43EA" },
+    "ios": { "supportsTablet": true, "bundleIdentifier": "com.group8.parkingdriver" },
+    "android": {
+      "package": "com.group8.parkingdriver",
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "CAMERA"]
+    },
+    "plugins": [
+      ["expo-location", { "locationWhenInUsePermission": "Cho phép ứng dụng tìm bãi xe gần bạn." }],
+      ["expo-image-picker", { "photosPermission": "Cho phép chọn ảnh minh họa sự cố." }],
+      "expo-local-authentication",
+      "expo-secure-store"
+    ]
+  }
+}

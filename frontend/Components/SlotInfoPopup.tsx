@@ -1,115 +1,83 @@
 "use client";
 
-import Image from "next/image";
-
-type Props = {
-  open: boolean;
-  onClose: () => void;
-  slot: any;
-};
+import { X, CarFront } from "lucide-react";
 
 export default function SlotInfoPopup({
   open,
   onClose,
   slot,
-}: Props) {
+}: {
+  open: boolean;
+  onClose: () => void;
+  slot: any;
+}) {
   if (!open || !slot) return null;
 
   return (
     <div
-      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50"
+      className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-5"
       onClick={onClose}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-[450px] bg-white rounded-3xl shadow-xl p-6"
+        className="w-full max-w-[460px] bg-white rounded-3xl shadow-xl p-7"
       >
-        <h2 className="text-2xl font-bold mb-6">
-          Thông tin Parking Slot
-        </h2>
-
-        <div className="space-y-4">
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Mã Slot</span>
-            <span className="font-semibold">
-              {slot.SlotCode}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Tầng</span>
-            <span className="font-semibold">
-              {slot.FloorName}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Loại xe</span>
-            <span className="font-semibold">
-              {slot.VehicleTypeName}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Trạng thái</span>
-
-            <span
-              className={`px-3 py-1 rounded-full text-sm ${
-                slot.SlotStatus === "Empty"
-                  ? "bg-green-100 text-green-700"
-                  : slot.SlotStatus === "Occupied"
-                  ? "bg-red-100 text-red-700"
-                  : slot.SlotStatus === "Reserved"
-                  ? "bg-blue-100 text-blue-700"
-                  : "bg-yellow-100 text-yellow-700"
-              }`}
-            >
-              {slot.SlotStatus}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Hoạt động</span>
-
-            <span
-              className={
-                slot.IsActive
-                  ? "text-green-600 font-semibold"
-                  : "text-red-600 font-semibold"
-              }
-            >
-              {slot.IsActive ? "Active" : "Inactive"}
-            </span>
-          </div>
-
-          <div className="flex justify-between">
-            <span className="text-gray-500">Ngày tạo</span>
-
-            <span className="font-semibold">
-              {new Date(slot.CreatedAt).toLocaleString()}
-            </span>
-          </div>
-
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Thông tin Parking Slot</h2>
+          <button onClick={onClose}>
+            <X size={21} />
+          </button>
         </div>
 
-        <div className="mt-6 flex justify-center">
-          <Image
-            src="/car.png"
-            alt="car"
-            width={220}
-            height={140}
-            className="rounded-xl border"
+        <div className="mt-6 space-y-4">
+          <Row label="Mã Slot" value={slot.SlotCode} />
+          <Row label="Tầng" value={slot.FloorName} />
+          <Row label="Loại xe" value={slot.VehicleTypeName} />
+          <Row label="Trạng thái" value={slot.SlotStatus} />
+          <Row
+            label="Hoạt động"
+            value={slot.IsActive ? "Active" : "Inactive"}
+          />
+
+          <div className="rounded-2xl bg-violet-50 p-4 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-white text-[#6D5DF6] grid place-items-center">
+              <CarFront size={21} />
+            </div>
+            <div>
+              <p className="text-xs text-gray-500">Biển số đang đỗ</p>
+              <p className="mt-1 text-lg font-bold text-[#6D5DF6]">
+                {slot.CurrentPlateNumber || "Không có xe"}
+              </p>
+              {slot.CurrentEntryTime && (
+                <p className="mt-1 text-xs text-gray-500">
+                  Vào lúc {new Date(slot.CurrentEntryTime).toLocaleString("vi-VN")}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <Row
+            label="Ngày tạo"
+            value={new Date(slot.CreatedAt).toLocaleString("vi-VN")}
           />
         </div>
 
         <button
           onClick={onClose}
-          className="mt-6 w-full py-3 rounded-xl bg-[#6246EA] text-white hover:bg-[#5236d8]"
+          className="mt-7 w-full py-3 rounded-xl bg-[#6D5DF6] text-white hover:bg-[#5B4BE5]"
         >
           Đóng
         </button>
       </div>
+    </div>
+  );
+}
+
+function Row({ label, value }: { label: string; value: any }) {
+  return (
+    <div className="flex justify-between gap-5">
+      <span className="text-gray-500">{label}</span>
+      <span className="font-semibold text-right">{value || "—"}</span>
     </div>
   );
 }
